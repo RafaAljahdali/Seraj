@@ -1,7 +1,7 @@
 # Seraj
 
-Seraj is a clinical monitoring dashboard built as a prototype inspired by NewTech Hackathon.  
-It predicts the risk of patient deterioration in the next 12 hours using vitals/labs data, and explains the main reasons behind the prediction (rule-based + optional Gemini LLM).
+Seraj is a clinical monitoring dashboard built as a prototype inspired by NewTech Hackathon Idea Challenge.
+It predicts the risk of patient deterioration in the next 12 hours using vitals/labs data, and explains the main reasons (rule-based + optional Gemini LLM).
 
 ---
 
