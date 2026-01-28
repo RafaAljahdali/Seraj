@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seraj Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/js/all.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #dcecff;
+      --card: #ffffff;
+      --border: #eef2f7;
+      --text: #111827;
+      --muted: #6b7280;
+      --shadow: 0 10px 30px rgba(16,24,40,0.05);
+
+      --critical-bg: #fff1f2;
+      --critical-bd: #fecdd3;
+      --critical-tx: #b91c1c;
+
+      --high-bg: #fff7ed;
+      --high-bd: #fed7aa;
+      --high-tx: #c2410c;
+
+      --moderate-bg: #fffbeb;
+      --moderate-bd: #fde68a;
+      --moderate-tx: #92400e;
+
+      --low-bg: #eff6ff;
+      --low-bd: #bfdbfe;
+      --low-tx: #1d4ed8;
+
+      --minimal-bg: #ecfdf5;
+      --minimal-bd: #a7f3d0;
+      --minimal-tx: #047857;
+
+      --accent: #2563eb;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .shell {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+    }
+
+    .sidebar {
+      background: var(--card);
+      border-right: 1px solid var(--border);
+      padding: 18px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 6px 10px;
+    }
+
+    .logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #2563eb, #7c3aed);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      box-shadow: 0 10px 30px rgba(37,99,235,0.18);
+    }
+
+    .brand .name {
+      font-weight: 900;
+      font-size: 1.05rem;
+    }
+
+    .nav {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 4px;
+    }
+
+    .nav a {
+      text-decoration: none;
+      color: var(--muted);
+      font-weight: 800;
+      font-size: 0.86rem;
+      padding: 10px 12px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav a.active {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+    }
+
+    .sidebar-foot {
+      margin-top: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .pill {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-weight: 800;
+      font-size: 0.8rem;
+      color: var(--muted);
+      box-shadow: var(--shadow);
+    }
+
+    .main {
+      padding: 18px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .title {
+      font-weight: 900;
+      font-size: 1.55rem;
+      margin: 0;
+    }
+
+    .top-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 6px 10px;
+      box-shadow: var(--shadow);
+    }
+
+    .profile img {
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      object-fit: cover;
+    }
+
+    .profile .who {
+      font-weight: 900;
+      font-size: 0.85rem;
+    }
+
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .kpi {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 12px;
+      box-shadow: var(--shadow);
+      min-height: 86px;
+    }
+
+    .kpi .label {
+      color: var(--muted);
+      font-weight: 900;
+      font-size: 0.78rem;
+      margin-bottom: 8px;
+    }
+
+    .kpi .value {
+      font-weight: 900;
+      font-size: 1.35rem;
+    }
+
+    .kpi .sub {
+      color: var(--muted);
+      font-size: 0.75rem;
+      margin-top: 6px;
+      font-weight: 700;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 14px;
+      align-items: start;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 12px;
+      box-shadow: var(--shadow);
+    }
+
+    .card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .card-head h2 {
+      margin: 0;
+      font-size: 0.95rem;
+      font-weight: 900;
+    }
+
+    .widgets {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .canvas-wrap {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    canvas { width: 100%; height: 210px; }
+
+    .queue {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .queue-item {
+      background: #fbfdff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 10px;
+    }
+
+    .queue-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .queue-top .who {
+      font-weight: 900;
+      font-size: 0.9rem;
+    }
+
+    .queue-sub {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 0.78rem;
+      line-height: 1.35;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .chip {
+      font-size: 0.7rem;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid #e5e7eb;
+      background: #fff;
+      color: #374151;
+      font-weight: 800;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 900;
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid #e5e7eb;
+      background: #fff;
+      white-space: nowrap;
+    }
+
+    .b-critical { background: var(--critical-bg); border-color: var(--critical-bd); color: var(--critical-tx); }
+    .b-high { background: var(--high-bg); border-color: var(--high-bd); color: var(--high-tx); }
+    .b-moderate { background: var(--moderate-bg); border-color: var(--moderate-bd); color: var(--moderate-tx); }
+    .b-low { background: var(--low-bg); border-color: var(--low-bd); color: var(--low-tx); }
+    .b-minimal { background: var(--minimal-bg); border-color: var(--minimal-bd); color: var(--minimal-tx); }
+
+    .details {
+      text-decoration: none;
+      font-weight: 900;
+      font-size: 0.78rem;
+      color: var(--accent);
+    }
+
+    .details:hover { text-decoration: underline; }
+
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .filter-btn {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-weight: 900;
+      font-size: 0.8rem;
+      color: #374151;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      user-select: none;
+    }
+
+    .filter-btn.active {
+      background: #eff6ff;
+      border-color: #bfdbfe;
+      color: #1d4ed8;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 0.74rem;
+      font-weight: 900;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .input, .select, .textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 10px;
+      font-family: inherit;
+      font-weight: 800;
+      font-size: 0.85rem;
+      outline: none;
+      background: #fff;
+      color: #111827;
+    }
+
+    .textarea { min-height: 84px; resize: vertical; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      border-radius: 12px;
+      border: 1px solid #1d4ed8;
+      background: #2563eb;
+      color: #fff;
+      padding: 10px 12px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .result-box {
+      margin-top: 10px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px;
+      background: #fbfdff;
+      color: #111827;
+      line-height: 1.35;
+      font-size: 0.85rem;
+      font-weight: 700;
+      white-space: normal;
+    }
+
+    @media (max-width: 1200px) {
+      .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .grid { grid-template-columns: 1fr; }
+      .widgets { grid-template-columns: 1fr; }
+      .shell { grid-template-columns: 1fr; }
+      .sidebar { position: sticky; top: 0; z-index: 5; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo"><i class="fa-solid fa-stethoscope"></i></div>
+        <div class="name">Seraj</div>
+      </div>
+
+      <div class="nav">
+        <a class="active" href="/"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+        <a href="#"><i class="fa-solid fa-bed"></i> Patients</a>
+        <a href="#"><i class="fa-solid fa-bell"></i> Alerts</a>
+        <a href="#"><i class="fa-solid fa-user-nurse"></i> Total Nurses</a>
+        <a href="#"><i class="fa-solid fa-gear"></i> Settings</a>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="topbar">
+        <h1 class="title">Clinical Monitoring Dashboard</h1>
+        <div class="top-right">
+          <div class="pill" id="timestamp">--</div>
+          <div class="profile">
+            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Doctor" />
+            <div class="who">Doctor Nawaf</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="kpis">
+        <div class="kpi">
+          <div class="label">Patients in Monitoring</div>
+          <div class="value" id="kpi-monitoring">--</div>
+          <div class="sub">Active monitored patients</div>
+        </div>
+        <div class="kpi">
+          <div class="label">High-Risk Patients (Next 12h)</div>
+          <div class="value" id="kpi-highrisk">--</div>
+          <div class="sub">Risk% &gt; 60%</div>
+        </div>
+        <div class="kpi">
+          <div class="label">New Alerts (Last 1h)</div>
+          <div class="value" id="kpi-newalerts">--</div>
+          <div class="sub">In-memory snapshot</div>
+        </div>
+        <div class="kpi">
+          <div class="label">Max Risk Today</div>
+          <div class="value" id="kpi-maxrisk">--</div>
+          <div class="sub" id="kpi-maxmeta">--</div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <section>
+          <div class="card">
+            <div class="card-head">
+              <h2>All Patients</h2>
+              <div class="pill" id="patients-meta">--</div>
+            </div>
+            <div class="filter-bar" id="patients-filters">
+              <button class="filter-btn active" data-tier="ALL" type="button">All</button>
+              <button class="filter-btn" data-tier="CRITICAL" type="button">Critical</button>
+              <button class="filter-btn" data-tier="HIGH" type="button">High</button>
+              <button class="filter-btn" data-tier="MODERATE" type="button">Moderate</button>
+              <button class="filter-btn" data-tier="LOW" type="button">Low</button>
+              <button class="filter-btn" data-tier="MINIMAL" type="button">Minimal</button>
+            </div>
+            <div id="patients" class="queue"></div>
+          </div>
+        </section>
+
+        <aside>
+          <div class="card" style="margin-top: 12px;">
+            <div class="card-head">
+              <h2>Manual Predict + Explain</h2>
+            </div>
+
+            <div class="form-grid">
+              <div class="field">
+                <label for="m-age">Age</label>
+                <input id="m-age" class="input" type="number" min="0" step="1" placeholder="e.g. 70" />
+              </div>
+              <div class="field">
+                <label for="m-gender">Gender</label>
+                <select id="m-gender" class="select">
+                  <option value="">--</option>
+                  <option value="M">M</option>
+                  <option value="F">F</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="m-admission">Admission Type</label>
+                <select id="m-admission" class="select">
+                  <option value="">--</option>
+                  <option value="ED">ED</option>
+                  <option value="Transfer">Transfer</option>
+                  <option value="Elective">Elective</option>
+                  <option value="Urgent">Urgent</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="m-oxygen-device">Oxygen Device</label>
+                <select id="m-oxygen-device" class="select">
+                  <option value="">--</option>
+                  <option value="none">none</option>
+                  <option value="nasal_cannula">nasal_cannula</option>
+                  <option value="simple_mask">simple_mask</option>
+                  <option value="non_rebreather">non_rebreather</option>
+                  <option value="high_flow">high_flow</option>
+                  <option value="cpap">cpap</option>
+                  <option value="bipap">bipap</option>
+                  <option value="ventilator">ventilator</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="m-hr">Heart Rate</label>
+                <input id="m-hr" class="input" type="number" step="0.1" placeholder="bpm" />
+              </div>
+              <div class="field">
+                <label for="m-rr">Respiratory Rate</label>
+                <input id="m-rr" class="input" type="number" step="0.1" placeholder="/min" />
+              </div>
+
+              <div class="field">
+                <label for="m-spo2">SpO2 %</label>
+                <input id="m-spo2" class="input" type="number" step="0.1" placeholder="%" />
+              </div>
+              <div class="field">
+                <label for="m-temp">Temperature (C)</label>
+                <input id="m-temp" class="input" type="number" step="0.1" placeholder="°C" />
+              </div>
+
+              <div class="field">
+                <label for="m-sbp">Systolic BP</label>
+                <input id="m-sbp" class="input" type="number" step="0.1" placeholder="mmHg" />
+              </div>
+              <div class="field">
+                <label for="m-dbp">Diastolic BP</label>
+                <input id="m-dbp" class="input" type="number" step="0.1" placeholder="mmHg" />
+              </div>
+
+              <div class="field">
+                <label for="m-o2">Oxygen Flow</label>
+                <input id="m-o2" class="input" type="number" step="0.1" placeholder="L/min" />
+              </div>
+              <div class="field">
+                <label for="m-prompt">Clinician Prompt</label>
+                <textarea id="m-prompt" class="textarea" placeholder="Explain for Doctor Nawaf... (optional)"></textarea>
+              </div>
+            </div>
+
+            <details style="margin-top:10px;">
+              <summary style="cursor:pointer; font-weight:900; color:#1d4ed8;">Advanced labs (optional)</summary>
+              <div class="form-grid" style="margin-top:10px;">
+                <div class="field">
+                  <label for="m-wbc">WBC</label>
+                  <input id="m-wbc" class="input" type="number" step="0.1" placeholder="e.g. 16" />
+                </div>
+                <div class="field">
+                  <label for="m-lactate">Lactate</label>
+                  <input id="m-lactate" class="input" type="number" step="0.1" />
+                </div>
+                <div class="field">
+                  <label for="m-creat">Creatinine</label>
+                  <input id="m-creat" class="input" type="number" step="0.1" />
+                </div>
+                <div class="field">
+                  <label for="m-crp">CRP</label>
+                  <input id="m-crp" class="input" type="number" step="0.1" />
+                </div>
+                <div class="field">
+                  <label for="m-hgb">Hemoglobin</label>
+                  <input id="m-hgb" class="input" type="number" step="0.1" />
+                </div>
+                <div class="field">
+                  <label for="m-sepsis">Sepsis Risk Score</label>
+                  <input id="m-sepsis" class="input" type="number" step="0.01" placeholder="0-1" />
+                </div>
+              </div>
+            </details>
+
+            <div style="margin-top: 10px;">
+              <button id="m-submit" class="btn" type="button"><i class="fa-solid fa-wand-magic-sparkles"></i>Predict + Explain</button>
+              <div id="m-result" class="result-box" style="display:none;"></div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const state = {
+      prevByPatient: {},
+      lastTop: [],
+      llmByPatient: {},
+      llmInFlight: {},
+      allPatients: [],
+      allPatientsFiltered: [],
+      patientsTierFilter: 'ALL',
+    };
+
+    function fmtPct(prob) {
+      if (typeof prob !== 'number' || !Number.isFinite(prob)) return '--';
+      return `${Math.round(prob * 100)}%`;
+    }
+
+    function tierClass(tier) {
+      const t = String(tier || '').toUpperCase();
+      if (t === 'CRITICAL') return 'badge b-critical';
+      if (t === 'HIGH') return 'badge b-high';
+      if (t === 'MODERATE') return 'badge b-moderate';
+      if (t === 'LOW') return 'badge b-low';
+      if (t === 'MINIMAL') return 'badge b-minimal';
+      return 'badge';
+    }
+
+    function cleanDriverName(name) {
+      const s = String(name || '').trim();
+      if (!s) return '';
+      let x = s;
+      x = x.replace(/_/g, ' ');
+      x = x.replace(/\bSYNERGY\b/gi, '');
+      x = x.replace(/\bLIKE\b/gi, '');
+      x = x.replace(/\s+/g, ' ').trim();
+      // light title-case
+      x = x.split(' ').map(w => w ? (w[0].toUpperCase() + w.slice(1).toLowerCase()) : w).join(' ');
+      return x;
+    }
+
+    function getExplainDrivers(item, maxDrivers = 3) {
+      const drivers = [];
+
+      const fromReasons = Array.isArray(item.agent_reasons) ? item.agent_reasons : [];
+      fromReasons.forEach(r => {
+        const c = cleanDriverName(r);
+        if (c && !drivers.includes(c)) drivers.push(c);
+      });
+
+      const expl = String(item.agent_explanation || '');
+      const m = expl.match(/Possible drivers:\s*([^\.\n]+)/i);
+      if (m && m[1]) {
+        m[1].split(',').map(x => cleanDriverName(x)).forEach(c => {
+          if (c && !drivers.includes(c)) drivers.push(c);
+        });
+      }
+
+      return drivers.slice(0, maxDrivers);
+    }
+
+    function parseLlmReason(text) {
+      const s = String(text || '').trim();
+      if (!s) return { rationale: '', drivers: [] };
+      const lines = s.split(/\r?\n/).map(x => x.trim()).filter(Boolean);
+      let rationale = '';
+      const drivers = [];
+      for (const ln of lines) {
+        if (!rationale && /^causal explanation\s*:/i.test(ln)) {
+          rationale = ln;
+          continue;
+        }
+        if (!rationale && !/^drivers\s*:/i.test(ln)) {
+          rationale = ln;
+          continue;
+        }
+        const m = ln.match(/^drivers\s*:\s*(.+)$/i);
+        if (m && m[1]) {
+          m[1].split('|').map(x => cleanDriverName(x)).forEach(x => {
+            if (x && !drivers.includes(x)) drivers.push(x);
+          });
+        }
+      }
+      return { rationale, drivers };
+    }
+
+    function safeText(elId, text) {
+      const el = document.getElementById(elId);
+      if (el) el.textContent = text;
+    }
+
+    function escapeHtml(s) {
+      return String(s || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function formatCausalInlineHtml(text) {
+      const s = String(text || '').trim();
+      if (!s) return '';
+      const m = s.match(/^(Causal\s+explanation\s*:)(\s*)(.*)$/i);
+      if (!m) return escapeHtml(s);
+      return `<span style="font-weight:900;">${escapeHtml(m[1])}</span>${escapeHtml((m[2] || '') + (m[3] || ''))}`;
+    }
+
+    function normalizeLlmErrorMessage(msg) {
+      const s = String(msg || '').trim();
+      if (!s) return '';
+      try {
+        const j = JSON.parse(s);
+        const t = j && j.error && j.error.type ? String(j.error.type) : '';
+        const m = j && j.error && j.error.message ? String(j.error.message) : '';
+        if (t || m) return [m || 'LLM error', t ? `(${t})` : ''].filter(Boolean).join(' ');
+      } catch (_) {}
+      return s;
+    }
+
+    async function ensureLlmReason(patientId) {
+      const pid = String(patientId);
+      if (!pid) return;
+      if (state.llmByPatient[pid] && state.llmByPatient[pid].text) return;
+      if (state.llmInFlight[pid]) return;
+      state.llmInFlight[pid] = true;
+
+      const el = document.getElementById(`why-${pid}`);
+      if (el && (!el.textContent || el.textContent.trim() === '—')) {
+        el.textContent = 'Generating…';
+      }
+      try {
+        const res = await fetch('/api/llm_reason?patient_id=' + encodeURIComponent(pid));
+        const data = await res.json();
+        const text = data && data.success && data.llm_reason ? String(data.llm_reason) : '';
+        if (text) {
+          state.llmByPatient[pid] = { ts: Date.now(), text };
+          const parsed = parseLlmReason(text);
+          const why = parsed && parsed.rationale ? parsed.rationale : text;
+          if (el) el.innerHTML = formatCausalInlineHtml(why);
+        } else {
+          const msg = (data && (data.error || data.llm_error)) ? String(data.error || data.llm_error) : '';
+          const isBusy = /LLM busy/i.test(msg) || /semaphore acquire timeout/i.test(msg);
+          if (isBusy) {
+            if (el) el.textContent = 'Generating…';
+            const tries = (state.llmByPatient[pid] && state.llmByPatient[pid].tries) ? Number(state.llmByPatient[pid].tries) : 0;
+            const nextTries = tries + 1;
+            state.llmByPatient[pid] = { ts: Date.now(), text: '', tries: nextTries };
+            const delayMs = Math.min(8000, 1200 * nextTries);
+            setTimeout(() => {
+              try { delete state.llmByPatient[pid]; } catch (_) {}
+              ensureLlmReason(pid);
+            }, delayMs);
+          } else {
+            if (el) el.textContent = msg ? `— (${msg})` : '—';
+          }
+        }
+      } catch (e) {
+        if (el) el.textContent = '—';
+      } finally {
+        delete state.llmInFlight[pid];
+      }
+    }
+
+    async function manualPredictAndExplain() {
+      const btn = document.getElementById('m-submit');
+      const out = document.getElementById('m-result');
+      if (!btn || !out) return;
+
+      const normalizeDigits = (s) => {
+        // Arabic-Indic digits  and Eastern Arabic-Indic  variants
+        const map = {
+          '٠':'0','١':'1','٢':'2','٣':'3','٤':'4','٥':'5','٦':'6','٧':'7','٨':'8','٩':'9',
+          '۰':'0','۱':'1','۲':'2','۳':'3','۴':'4','۵':'5','۶':'6','۷':'7','۸':'8','۹':'9',
+        };
+        return String(s || '').replace(/[٠-٩۰-۹]/g, ch => map[ch] ?? ch).replace(/,/g, '.');
+      };
+
+      const getNum = (id) => {
+        const el = document.getElementById(id);
+        if (!el) return undefined;
+        const v = normalizeDigits(String(el.value || '').trim());
+        if (!v) return undefined;
+        const n = Number(v);
+        return Number.isFinite(n) ? n : undefined;
+      };
+      const getStr = (id) => {
+        const el = document.getElementById(id);
+        if (!el) return undefined;
+        const v = String(el.value || '').trim();
+        return v ? v : undefined;
+      };
+
+      const patient = {};
+      const age = getNum('m-age');
+      const hr = getNum('m-hr');
+      const rr = getNum('m-rr');
+      const spo2 = getNum('m-spo2');
+      const temp = getNum('m-temp');
+      const sbp = getNum('m-sbp');
+      const dbp = getNum('m-dbp');
+      const o2 = getNum('m-o2');
+      const wbc = getNum('m-wbc');
+      const lact = getNum('m-lactate');
+      const creat = getNum('m-creat');
+      const crp = getNum('m-crp');
+      const hgb = getNum('m-hgb');
+      const sepsis = getNum('m-sepsis');
+
+      if (age !== undefined) patient.age = age;
+      const gender = getStr('m-gender');
+      if (gender) patient.gender = gender;
+      const admission = getStr('m-admission');
+      if (admission) patient.admission_type = admission;
+      const od = getStr('m-oxygen-device');
+      if (od) patient.oxygen_device = od;
+
+      if (hr !== undefined) patient.heart_rate = hr;
+      if (rr !== undefined) patient.respiratory_rate = rr;
+      if (spo2 !== undefined) patient.spo2_pct = spo2;
+      if (temp !== undefined) patient.temperature_c = temp;
+      if (sbp !== undefined) patient.systolic_bp = sbp;
+      if (dbp !== undefined) patient.diastolic_bp = dbp;
+      if (o2 !== undefined) patient.oxygen_flow = o2;
+
+      if (wbc !== undefined) patient.wbc_count = wbc;
+      if (lact !== undefined) patient.lactate = lact;
+      if (creat !== undefined) patient.creatinine = creat;
+      if (crp !== undefined) patient.crp_level = crp;
+      if (hgb !== undefined) patient.hemoglobin = hgb;
+      if (sepsis !== undefined) patient.sepsis_risk_score = sepsis;
+
+      const user_prompt = getStr('m-prompt');
+      if (!Object.keys(patient).length) {
+        out.style.display = 'block';
+        out.innerHTML = '<b>Missing input:</b> Please enter at least one field.';
+        return;
+      }
+
+      btn.disabled = true;
+      out.style.display = 'block';
+      out.innerHTML = 'Running prediction...';
+      try {
+        const res = await fetch('/api/predict_and_explain', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ patient, user_prompt })
+        });
+        const data = await res.json();
+        if (!data || !data.success) {
+          const msg = (data && data.error) ? data.error : 'Request failed';
+          out.innerHTML = `<b>Error:</b> ${escapeHtml(msg)}`;
+          return;
+        }
+
+        const pred = data.prediction || {};
+        const tier = String(pred.risk_tier || '--');
+        const prob = (typeof pred.probability === 'number') ? `${Math.round(pred.probability * 100)}%` : '--';
+        const reason = data.llm_reason ? String(data.llm_reason) : '';
+        const reasonHtml = reason ? escapeHtml(reason).replace(/\n/g, '<br>') : '—';
+        const causalFirst = reason ? (String(reason).trim().split(/\r?\n/)[0] || '') : '';
+        const causalHtml = causalFirst ? formatCausalInlineHtml(causalFirst) : reasonHtml;
+        const llmErrRaw = data.llm_error ? String(data.llm_error) : '';
+        const llmErr = normalizeLlmErrorMessage(llmErrRaw);
+        const errHtml = llmErr ? `<div style="margin-top:8px; color:#b91c1c;"><b>LLM:</b> ${escapeHtml(llmErr)}</div>` : '';
+        out.innerHTML = `<b>Prediction:</b> ${escapeHtml(tier)}<br>${causalHtml}${errHtml}`;
+      } catch (e) {
+        out.innerHTML = `<b>Error:</b> ${escapeHtml(e)}`;
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    const mBtn = document.getElementById('m-submit');
+    if (mBtn) {
+      mBtn.addEventListener('click', manualPredictAndExplain);
+    }
+
+    function pad2(n) {
+      return String(n).padStart(2, '0');
+    }
+
+    function formatTimestamp(d) {
+      const dt = d instanceof Date ? d : new Date(d);
+      if (!(dt instanceof Date) || isNaN(dt.getTime())) return '--';
+      const day = pad2(dt.getDate());
+      const month = pad2(dt.getMonth() + 1);
+      const year = dt.getFullYear();
+      let h = dt.getHours();
+      const ampm = h >= 12 ? 'م' : 'ص';
+      h = h % 12;
+      if (h === 0) h = 12;
+      const hh = pad2(h);
+      const mm = pad2(dt.getMinutes());
+      const ss = pad2(dt.getSeconds());
+      return `${day}/${month}/${year} ${hh}:${mm}:${ss} ${ampm}`;
+    }
+
+    function drawLine(canvasId, series, stroke = '#2563eb') {
+      const c = document.getElementById(canvasId);
+      if (!c) return;
+      const ctx = c.getContext('2d');
+      const w = c.width;
+      const h = c.height;
+      ctx.clearRect(0, 0, w, h);
+
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(0, 0, w, h);
+
+      const pad = 16;
+      const iw = w - pad * 2;
+      const ih = h - pad * 2;
+
+      ctx.strokeStyle = '#e5e7eb';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(pad, pad, iw, ih);
+
+      if (!series || series.length < 2) return;
+      const maxV = Math.max(1, ...series);
+
+      ctx.beginPath();
+      for (let i = 0; i < series.length; i++) {
+        const x = pad + (i / (series.length - 1)) * iw;
+        const y = pad + (1 - (series[i] / maxV)) * ih;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.strokeStyle = stroke;
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      ctx.fillStyle = '#6b7280';
+      ctx.font = '800 11px Inter';
+      ctx.fillText('0', pad - 10, pad + ih + 12);
+      ctx.fillText(String(maxV), pad - 18, pad + 12);
+    }
+
+    function drawStackedBars(canvasId, labels, stacksByLabel) {
+      const c = document.getElementById(canvasId);
+      if (!c) return;
+      const ctx = c.getContext('2d');
+      const w = c.width;
+      const h = c.height;
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(0, 0, w, h);
+
+      const pad = 18;
+      const iw = w - pad * 2;
+      const ih = h - pad * 2;
+      ctx.strokeStyle = '#e5e7eb';
+      ctx.strokeRect(pad, pad, iw, ih);
+
+      const colors = {
+        MINIMAL: '#10b981',
+        LOW: '#3b82f6',
+        MODERATE: '#f59e0b',
+        HIGH: '#f97316',
+        CRITICAL: '#ef4444',
+      };
+
+      const n = Math.max(1, labels.length);
+      const step = iw / n;
+      const barW = step * 0.55;
+
+      for (let i = 0; i < labels.length; i++) {
+        const lab = labels[i];
+        const x0 = pad + i * step + (step - barW) / 2;
+        const stacks = stacksByLabel[lab] || {};
+        const total = Object.values(stacks).reduce((a, b) => a + b, 0) || 1;
+        let y = pad + ih;
+
+        ['MINIMAL','LOW','MODERATE','HIGH','CRITICAL'].forEach(k => {
+          const v = stacks[k] || 0;
+          const hh = (v / total) * ih;
+          ctx.fillStyle = colors[k] || '#9ca3af';
+          ctx.fillRect(x0, y - hh, barW, hh);
+          y -= hh;
+        });
+
+        ctx.fillStyle = '#6b7280';
+        ctx.font = '800 10px Inter';
+        ctx.fillText(lab, x0, pad + ih + 14);
+      }
+    }
+
+    function drawDonut(canvasId, items) {
+      const c = document.getElementById(canvasId);
+      if (!c) return;
+      const ctx = c.getContext('2d');
+      const w = c.width;
+      const h = c.height;
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(0, 0, w, h);
+
+      const cx = w / 2;
+      const cy = h / 2;
+      const r = Math.min(w, h) * 0.32;
+      const r2 = r * 0.62;
+
+      const total = items.reduce((a, b) => a + b.value, 0) || 1;
+      let ang = -Math.PI / 2;
+
+      items.forEach(it => {
+        const a2 = ang + (it.value / total) * Math.PI * 2;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.arc(cx, cy, r, ang, a2);
+        ctx.closePath();
+        ctx.fillStyle = it.color;
+        ctx.fill();
+        ang = a2;
+      });
+
+      ctx.beginPath();
+      ctx.arc(cx, cy, r2, 0, Math.PI * 2);
+      ctx.fillStyle = '#fff';
+      ctx.fill();
+
+      ctx.font = '800 10px Inter';
+      let y = 14;
+      items.slice(0, 5).forEach(it => {
+        ctx.fillStyle = it.color;
+        ctx.fillRect(12, y - 8, 10, 10);
+        ctx.fillStyle = '#374151';
+        ctx.fillText(`${it.label} (${it.value})`, 28, y);
+        y += 14;
+      });
+    }
+
+    function renderAllPatients(patients) {
+      const wrap = document.getElementById('patients');
+      if (!wrap) return;
+
+      const list = Array.isArray(patients) ? patients : [];
+      safeText('patients-meta', list.length ? `${list.length} patients` : '—');
+
+      if (!list.length) {
+        wrap.innerHTML = '<div class="queue-sub">No patients to display.</div>';
+        return;
+      }
+
+      wrap.innerHTML = list.slice(0, 30).map(item => {
+        const pid = item.patient_id;
+        const tier = item.risk_tier || 'UNKNOWN';
+        const prob = item.probability;
+        const unit = item.unit || '';
+        const room = item.room || '';
+        const bed = item.bed || '';
+        const where = [unit, room, bed].filter(Boolean).join(' • ');
+        // Use explanation from API directly if available
+        const explanation = item.explanation || '';
+        return `
+          <div class="queue-item">
+            <div class="queue-top">
+              <div class="who">Patient ${pid}</div>
+              <div class="${tierClass(tier)}">${tier} • ${fmtPct(prob)}</div>
+            </div>
+            <div class="queue-sub">${where || '—'}</div>
+            <div class="queue-sub" style="color:#111827;"><span id="why-${pid}">${explanation ? formatCausalInlineHtml(explanation) : '—'}</span></div>
+            <div class="queue-top" style="margin-top:8px;">
+              <div class="chips"></div>
+              <a class="details" href="/patient_details?patient_id=${pid}">Details</a>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function applyPatientFilter() {
+      const tier = String(state.patientsTierFilter || 'ALL').toUpperCase();
+      const f = tier === 'ALL'
+        ? state.allPatients
+        : state.allPatients.filter(p => String(p.risk_tier || '').toUpperCase() === tier);
+      state.allPatientsFiltered = f;
+      renderAllPatients(f);
+    }
+
+    async function fetchSummary() {
+      const live = document.getElementById('live');
+      try {
+        if (live) live.textContent = 'Live: updating…';
+
+        const res = await fetch('/api/dashboard_summary?limit=10');
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        if (!data || !data.success) throw new Error('Bad response');
+
+        const k = data.kpis || {};
+        const top = Array.isArray(data.priority_queue) ? data.priority_queue : [];
+
+        // Use a broader patient set for unit/reasons/all-patients to avoid only showing 2-3 units
+        const resAll = await fetch('/api/patients_overview?limit=50');
+        const dataAll = resAll.ok ? await resAll.json() : null;
+        const allPatients = (dataAll && dataAll.success && Array.isArray(dataAll.patients)) ? dataAll.patients : top;
+        state.allPatients = allPatients;
+
+        safeText('kpi-monitoring', (k.patients_in_monitoring ?? '--').toString());
+        safeText('kpi-highrisk', (k.high_risk_next_12h ?? '--').toString());
+        safeText('kpi-newalerts', (k.new_alerts_last_1h ?? '--').toString());
+        const max = k.max_risk || null;
+        safeText('kpi-maxrisk', max && typeof max.probability === 'number' ? `${Math.round(max.probability * 100)}%` : '--');
+        safeText('kpi-maxmeta', max && max.patient_id ? `Patient ${max.patient_id} • ${max.risk_tier || ''}` : '--');
+
+        safeText('timestamp', formatTimestamp(new Date()));
+        safeText('meta', data.timestamp ? `API: ${data.timestamp}` : '--');
+
+        // All Patients section
+        applyPatientFilter();
+
+        (top || []).forEach(item => {
+          const pid = item.patient_id;
+          const prob = typeof item.probability === 'number' ? item.probability : null;
+          if (pid !== undefined && prob !== null) state.prevByPatient[String(pid)] = prob;
+        });
+
+        if (live) live.textContent = 'Live: OK';
+      } catch (e) {
+        if (live) live.textContent = 'Live: error';
+        safeText('timestamp', formatTimestamp(new Date()));
+        safeText('meta', `ERR: ${String(e)}`);
+        try { console.error('fetchSummary error:', e); } catch (_) {}
+      }
+    }
+
+    window.addEventListener('error', (ev) => {
+      try {
+        const msg = ev && ev.message ? ev.message : String(ev);
+        safeText('meta', `JS ERR: ${msg}`);
+      } catch (_) {}
+    });
+
+    // Tier filter wiring
+    const filters = document.getElementById('patients-filters');
+    if (filters) {
+      filters.addEventListener('click', (e) => {
+        const btn = e.target && e.target.closest ? e.target.closest('button[data-tier]') : null;
+        if (!btn) return;
+        const tier = btn.getAttribute('data-tier') || 'ALL';
+        state.patientsTierFilter = tier;
+        Array.from(filters.querySelectorAll('button[data-tier]')).forEach(b => {
+          b.classList.toggle('active', b === btn);
+        });
+        applyPatientFilter();
+      });
+    }
+
+    fetchSummary();
+    setInterval(fetchSummary, 15000);
+  </script>
+</body>
+</html>
