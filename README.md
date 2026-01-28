@@ -15,6 +15,12 @@ It predicts the risk of patient deterioration in the next 12 hours using vitals/
 
 ---
 
+## Dataset
+This project uses the **Hospital Deterioration Dataset** from Kaggle:  
+[Hospital Deterioration Dataset (Kaggle)](https://www.kaggle.com/datasets/tarekmasryo/hospital-deterioration-dataset)
+
+---
+
 ## Project Structure
 ```text
 seraj_project/
